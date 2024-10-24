@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -140,17 +143,45 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        ProdutosDTO produto = new ProdutosDTO();
-        String nome = cadastroNome.getText();
-        String valor = cadastroValor.getText();
-        String status = "A Venda";
-        produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
+        //inicializando a resposta do cadastro no banco de dados
+        int resposta;
         
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
-        
+        //validação para caso os campos estejam vazios
+        if(cadastroNome.getText().isEmpty() || cadastroValor.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Favor preencher todos os campos.");
+        }else {
+            //validação para caso os campos estejam preechidos incorretamente
+            if(!validarNome() && !validarValor()){
+                JOptionPane.showMessageDialog(null, """
+                                                    Favor verificar se todos os campos estão preenchidos corretamente.
+
+                                                    Nome: Letras, números e caracteres.
+                                                    Valor: Apenas números inteiro positivo.
+                                                    """);
+            }else {
+                /**
+                 * Cadastro do produto após as validações
+                 */
+                ProdutosDTO produto = new ProdutosDTO();
+                String nome = cadastroNome.getText();
+                String valor = cadastroValor.getText();
+                String status = "A Venda";
+                produto.setNome(nome);
+                produto.setValor(Integer.valueOf(valor));
+                produto.setStatus(status);
+
+                ProdutosDAO produtodao = new ProdutosDAO();
+                resposta = produtodao.cadastrarProduto(produto);
+
+                if(resposta == 1){ //mensagem para o cadastro com sucesso
+                    JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso.");
+                }else if(resposta == 1062){//mensagem para o cadastro que já existe
+                    JOptionPane.showMessageDialog(null, "Produto já foi cadastrado.");
+                }else { //mensagem para o cadastro que deu errado
+                    JOptionPane.showMessageDialog(null, "Não foi possivel realizar o cadastro do produto.");
+                }
+            }
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
@@ -205,4 +236,13 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
+    
+    public boolean validarNome(){
+        return cadastroNome.getText().matches("[\\w\\W]+");
+    }
+    
+    public boolean validarValor(){
+        return cadastroValor.getText().matches("[\\d]+");
+    }
+
 }
