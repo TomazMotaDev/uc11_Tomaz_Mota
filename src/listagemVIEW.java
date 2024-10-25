@@ -141,6 +141,11 @@ public class listagemVIEW extends javax.swing.JFrame {
         
         ProdutosDAO produtosdao = new ProdutosDAO();
         
+        if(!validarID()){
+            JOptionPane.showMessageDialog(null, "Favor inserir um ID válido (número inteiro positivo)");
+        }else{
+            produtosdao.venderProduto(Integer.parseInt(id_produto_venda.getText()));
+        }
                 
         //produtosdao.venderProduto(Integer.parseInt(id));
         listarProdutos();
