@@ -153,8 +153,7 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
+        listarProdutosVendidos();
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -220,6 +219,33 @@ public class listagemVIEW extends javax.swing.JFrame {
             
             //fazendo a busca no banco de dados e puxando para uma lista
             ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+            
+            //incrementando todos os objetos da lista e adicionando à tabela
+            for(int i = 0; i < listagem.size(); i++){
+                model.addRow(new Object[]{
+                    listagem.get(i).getId(),
+                    listagem.get(i).getNome(),
+                    listagem.get(i).getValor(),
+                    listagem.get(i).getStatus()
+                });
+            }
+        } catch (Exception e) {
+            //mensagem para caso a conexão a banco de dados dê errado
+            JOptionPane.showMessageDialog(null, "Não foi possível acessar o banco de dados para exibir a listagem de produtos");
+        }    
+    }
+    
+    private void listarProdutosVendidos(){
+        //conectando com o banco de dados e recebendo a listagem de todos os produtos
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            
+            //zerando a tabela
+            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+            model.setNumRows(0);
+            
+            //fazendo a busca no banco de dados e puxando para uma lista
+            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
             
             //incrementando todos os objetos da lista e adicionando à tabela
             for(int i = 0; i < listagem.size(); i++){
