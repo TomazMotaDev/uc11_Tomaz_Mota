@@ -135,6 +135,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cadastroNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastroNomeActionPerformed
@@ -151,7 +152,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Favor preencher todos os campos.");
         }else {
             //validação para caso os campos estejam preechidos incorretamente
-            if(!validarNome() && !validarValor()){
+            if(!validarNome() || !validarValor()){
                 JOptionPane.showMessageDialog(null, """
                                                     Favor verificar se todos os campos estão preenchidos corretamente.
 
@@ -242,7 +243,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }
     
     public boolean validarValor(){
-        return cadastroValor.getText().matches("[\\d]+");
+        return cadastroValor.getText().matches("[0-9]+");
     }
 
 }
