@@ -70,11 +70,36 @@ public class ProdutosDAO {
                 }
             }catch (SQLException ex){
                 listagem = null;
-                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao buscar a lista de filmes no banco de dados.");
+                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao buscar a lista de produtos no banco de dados.");
             }
         }
         
         return listagem;
+    }
+    
+    public void venderProduto(int id){
+        conn = new conectaDAO().connectDB();
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?;";
+        
+        if(conn != null){
+            try{
+                prep = conn.prepareStatement(sql);
+                prep.setInt(1, id);
+                
+                prep.execute();
+                
+                JOptionPane.showMessageDialog(null, "Produto vendido com sucesso.");
+                
+            }catch (SQLException ex){
+                JOptionPane.showMessageDialog(null, """
+                                                    Ocorreu um erro ao buscar o produto desejado. 
+                                                    
+                                                    Verifique se o ID está correto e que ele existe no banco de dados
+                                                    conforme a listagem dos produtos.
+                                                    """);
+            }
+        }
+        
     }
         
 }

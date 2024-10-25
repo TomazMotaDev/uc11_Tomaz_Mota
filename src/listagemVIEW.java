@@ -142,6 +142,12 @@ public class listagemVIEW extends javax.swing.JFrame {
         
         ProdutosDAO produtosdao = new ProdutosDAO();
         
+        if(!validarID()){
+            JOptionPane.showMessageDialog(null, "Favor inserir um ID válido (número inteiro positivo)");
+        }else{
+            produtosdao.venderProduto(Integer.parseInt(id_produto_venda.getText()));
+        }
+                
         //produtosdao.venderProduto(Integer.parseInt(id));
         listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
@@ -228,5 +234,9 @@ public class listagemVIEW extends javax.swing.JFrame {
             //mensagem para caso a conexão a banco de dados dê errado
             JOptionPane.showMessageDialog(null, "Não foi possível acessar o banco de dados para exibir a listagem de produtos");
         }    
+    }
+    
+    public boolean validarID(){
+        return id_produto_venda.getText().matches("[\\d]+");
     }
 }
