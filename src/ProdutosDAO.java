@@ -76,61 +76,6 @@ public class ProdutosDAO {
         
         return listagem;
     }
-    
-    public void venderProduto(int id){
-        conn = new conectaDAO().connectDB();
-        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?;";
-        
-        if(conn != null){
-            try{
-                prep = conn.prepareStatement(sql);
-                prep.setInt(1, id);
-                
-                prep.execute();
-                
-                JOptionPane.showMessageDialog(null, "Produto vendido com sucesso.");
-                
-            }catch (SQLException ex){
-                JOptionPane.showMessageDialog(null, """
-                                                    Ocorreu um erro ao buscar o produto desejado. 
-                                                    
-                                                    Verifique se o ID está correto e que ele existe no banco de dados
-                                                    conforme a listagem dos produtos.
-                                                    """);
-            }
-        }
-        
-    }
-    
-    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
-        conn = new conectaDAO().connectDB();
-        String sql = "SELECT id, nome, valor, status FROM produtos WHERE status = 'Vendido'";
-        
-        if(conn != null){
-            try{
-                /*Statement para que a busca seja feito no banco de dados*/
-                prep = this.conn.prepareStatement(sql);
-                ResultSet rs = prep.executeQuery();
-                
-                /*Criando um objeto para cada produto encontrado na consulta ao banco
-                e adicionando a listagem de produtos*/
-                while(rs.next()){
-                    ProdutosDTO produto = new ProdutosDTO();
-                    produto.setId(rs.getInt("id"));
-                    produto.setNome(rs.getString("nome"));
-                    produto.setValor(rs.getInt("valor"));
-                    produto.setStatus(rs.getString("status"));
-
-                    listagem.add(produto);                
-                }
-            }catch (SQLException ex){
-                listagem = null;
-                JOptionPane.showMessageDialog(null, "Ocorreu um erro ao buscar a lista de produtos no banco de dados.");
-            }
-        }
-        
-        return listagem;
-    }
         
 }
 
